@@ -1,0 +1,254 @@
+---
+title: "Goal Programming Assign"
+author: "Sushma"
+date: "2023-11-26"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+# Goal Programming 
+
+*The Research and Development Division of the Emax Corporation has developed three new products. A decision now needs to be made on which mix of these products should be produced. Management wants primary consideration given to three factors: total profit, stability in the workforce, and achieving an increase in the company’s earnings next year from the $60 million achieved this year. In particular, using the units given in the following table,*
+
+
+```{r}
+### Load kableextra package
+library(kableExtra)
+```
+
+
+```{r}
+### Emax Corporation Goal table
+
+RDM_df=data.frame(Factor=c("Profit","Employement","Earning Next year"),
+                    "1"=c(15,8,6),
+                    "2"=c(12,6,5),
+                    "3"=c(20,5,4),
+                    Goal=c("Maximum","=70",">=60"),
+                    Units=c("Millions of dollars","Hundreds of workers","Millions of dollars"),
+                    Penalty=c("Null","5","2"))
+
+RDM_df
+```
+
+```{r}
+# Display the RDM_df dataset as a table using kableExtra functions
+RDM_df %>% 
+  
+  # Render the table using kable function and set column alignment to center
+  kable(align ="c") %>% 
+  
+  # Apply classic table format using kable_classic function
+  kable_classic() %>% 
+  
+   # Add a header above the columns related to the 'Product'
+  add_header_above(header = c(" "=1,"Product"=3," "=3)) %>% 
+  
+  # Add a header above the columns related to the 'Unit contribution'
+  add_header_above(header = c(" "=1,"Unit contribution"=3," "=3)) %>% 
+  
+  # Specify column formatting: applying right borders to specific columns
+  column_spec(1,border_right =TRUE) %>%
+  column_spec(1,border_left =TRUE) %>%
+  column_spec(2,border_right =TRUE) %>%
+  column_spec(3,border_right =TRUE) %>%
+  column_spec(4,border_right =TRUE) %>% 
+  column_spec(5,border_right =TRUE) %>%
+  column_spec(6,border_right =TRUE) %>%
+  column_spec(7,border_right =TRUE)
+```
+
+## Question:1. Define y1+ and y1-, respectively, as the amount over (if any) and the amount under (if any) the employment level goal. Define y2+ and y2- in the same way for the goal regarding earnings next year. Define x1, x2, and x3 as the production rates of Products 1, 2, and 3, respectively. With these definitions, use the goal programming technique to express y1+, y1- , y2+ and y2- algebraically in terms of x1, x2, and x3. Also, express P in terms of x1, x2, and x3.
+
+
+### Define the Varibles 
+
+$x_{1}$: Total Profit.
+
+$x_{2}$: Employment level.
+
+$x_{3}$: Earning next year.
+
+
+### Generate the pay and level of employment variance factors for the upcoming year:
+  
+$y^+_{1}$: If employment surpasses the target employment level.
+
+$y^-_{1}$: If employment falls below the target employment level.
+
+$y^+_{2}$ : The excess beyond the target earnings for the following year.
+
+$y^-_{2}$:The sum below the target earnings for the following year.
+
+
+### Identify the manufacturing rates of Products 1, 2, and 3 as $x_{1}$, $x_{2}$, and $x_{3}$.
+
+Rewrite the constraints like below
+
++ $$8x_{1}+6x_{2}+5x_{3} = 70$$
+
++ $$6x_{1}+5x_{2}+4x_{3} ≥ 60$$
+
+
+Write the above constraints as below
+
++ $$y_{1} = 8x_{1}+6x_{1}+5x_{1}-70$$
+
++ $$y_{2} = 6x_{2}+5x_{2}+4x_{2}-60$$
+
+
+In the present case, $y_{2}$ could be either positive or negative, depending on which is the greater or the two given that the employment level is = 70.
+
+
++ Let's define $y_{i} = y^+{i}-y^-{i}$
+
+
+Now we write as per our problem
+
++ $$y_{1} = y^+{1}-y^-{1}$$
++ $$y_{2} = y^+{2}-y^-{2}$$
+
+
+We write Equation by replacing $y_{2}$ & $y_{3}$
+
++ $$y^+{1}-y^-{1} = 8x_{1}+6x_{2}+5x_{3}-70$$
++ $$y^+{2}-y^-{2} = 6x_{1}+5x_{2}+4x_{3}-60$$
+
+Rewriting the constraints, we get our final formulation
+
++ $$8x_{1}+6x_{2}+5x_{3}-(y^+{2}-y^-{2})=70$$
++ $$6x_{1}+5x_{2}+4x_{3}-(y^+{3}-y^-{3})=60$$
+
+
+We utilize the $x_{1}$, $x_{2}$, and $x_{3}$ variables for describing the objective function (Z) and the overall profit (P).
+
+
++ $$ P = 15x_{1}+12x_{2}+20x_{3}$$
+
+#Question2: Express management’s objective function in terms of $x_{1}$, $x_{2}$, $x_{3}$, $y^+{1}$, $y^-{1}$ , $y^+{2}$ and $y^-{2}$.
+
+
+The aim of management is to achieve the greatest profit, or Z = P - 5C - 2D.
+
+..
+
+Where
+  + P = total (discounted) earnings during the course of the new goods
+  
+      $$P = 15x_{1}+12x_{2}+20x_{3}$$
+  
+  + C = shift (either way) in the employment rate as of right now
+  
+      $$y_{2} = y^+{2}-y^-{2}$$
+  
+  + D = reduction (if any) in profits from the level of the current year in the following year
+  
+      $$y_{3} = y^+{3}-y^-{3}$$
+
+
+The selection factors' non-negativity
+
+$$ x_{1} ≥ 0 , x_{2} ≥ 0, x_{3} ≥ 0$$
+
+
+$$y^+{2} ≥ 0 , y^-{2} ≥ 0 , y^+{3} ≥ 0 , y^-{3} ≥ 0 $$
+*Rewriting the Maximum Z using $y_{2}$ & $y_{3}$ in place of C and D
+
+  $$ Maximum \hspace{.2cm} Z = 15x_{1}+12x_{2}+20x_{3} -5y^+{2}-2y^+{3}$$
+ 
+#Question 3: Formulate and solve the linear programming model. What are your findings?
+
+
+```{r}
+#Load the libraries for linear programming
+library(lpSolveAPI)
+```
+
+# This line constructs an LP (linear programming) issue case with three limitations and six preference variables. The object lpm is an illustration of the LP problem.
+
+```{r}
+# Create an LP model with 2 constraints and 7 decision variables
+lpm<-make.lp(2,7)
+```
+
+
+```{r}
+# Define the coefficients of the objective function
+set.objfn(lpm, c(15,12,20,-5,-5,0,-2))
+```
+
+```{r}
+# Set the sense of the LP model 'lpm' to maximize
+lp.control(lpm, sense="max")
+```
+
+#This line produces an LP (linear programming) problem example with three constraints and six preference variables. The data type lpm is a representation of the LP problem.
+
+```{r}
+# Set the coefficients of the first constraint (row 1) in the LP model 'lpm'
+set.row(lpm,1,c(8,6,5,-1,-1,0,0),indices = c(1,2,3,4,5,6,7))
+```
+
+#This line adds another restriction to the LP challenge, just like the one that came before it did, minus the second constraint.
+
+```{r}
+# Set the coefficients of the second constraint (row 2) in the LP model 'lpm'
+set.row(lpm,2,c(6,5,4,0,0,1,-1),indices = c(1,2,3,4,5,6,7))
+```
+
+
+```{r}
+#Define the RHS
+rhs<-c(70,60)
+```
+
+
+```{r}
+#This line sets values that are on the right opposite of the LP problem's constraints
+set.rhs(lpm,rhs)
+```
+
+
+```{r}
+#The three constraints' constraint types are set in this line.
+set.constr.type(lpm,c("=","="))
+```
+
+
+```{r}
+#This line determines the lower boundaries for the nine preference variables. In this case, the lower bounds are set to zero because the selected factors are not negativities.
+set.bounds(lpm,lower = rep(0,7))
+```
+
+
+
+```{r}
+#The three limitations are given names in this line.
+lp.rownames<-c("employment","Earning next year")
+```
+
+
+```{r}
+#On this particular line, the seven variables used for decision-making are assigned names. P stands for plus, and m for minus.
+lp.colnames<-c("x1","x2","x3","y1p","y1m","y2p","y2m")
+```
+
+#This line uses the given limitations and goal functions to resolve the LP issue.
+
+```{r}
+# Solve the linear programming (LP) model 'lpm' previously defined
+solve(lpm)
+```
+
+```{r}
+# Get the objective function value of the solved LP model 'lpm'
+get.objective(lpm)
+```
+
+```{r}
+# Get the optimal values of decision variables from the solved LP model 'lpm'
+get.variables(lpm)
+```
+
